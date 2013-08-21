@@ -1,0 +1,30 @@
+<div class="input-append">
+    <input 
+        type        = "text" 
+        placeholder = "new to do item"
+        class       = "input-large" 
+        ng-model    = "newItemText"
+        >
+    <button 
+        type        = "submit" 
+        class       = "btn btn-primary" 
+        ng-click    = "addToDo()"
+        >Add</button>
+</div>
+
+<table class=table>
+    <tr ng-repeat="item in items">
+
+        <td width="2em">
+            <a href="" ng-click="removeItem(item.id)">
+                <i title="delete" class="icon-remove icon-2x text-error"></i>
+            </a>
+
+        <td width="2em">
+            <a href="#/item/{{item.id}}">
+                <i title="view" class="icon-search icon-2x"> </i>
+            </a>
+
+        <td>{{item.text}}
+
+</table>
