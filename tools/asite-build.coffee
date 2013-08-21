@@ -74,16 +74,67 @@ processFileModule = (file) ->
             #{args.join ",\n    "}
         )"""
 
-    console.log result
     return result
 
 #-------------------------------------------------------------------------------
 processFileRoutes = (file) ->
-    return "1+1"
+    __asite = 
+        file:   file.name
+        module: file.module
+
+    parms = []
+    args  = []
+
+    parms.push "__asite"
+    args.push  JSON.stringify(__asite)
+
+    result = """(function(#{parms.join ", "}){
+        defRoute = function(view, url) {
+            var amod = angular.module('#{file.module}')
+            amod.config(function($routeProvider) {
+                if (view)
+                    $routerProvider.when(url, {
+                        templateUrl: '#{file.module}/views/' + view + '.html',
+                        controller:  view + '-controller'
+                    })
+                else
+                    $routerProvider.otherwise({
+                        redirectTo: url
+                    })
+            })
+        }
+        #{file.js}
+        })(
+            #{args.join ",\n    "}
+        )"""
+
+    return result
 
 #-------------------------------------------------------------------------------
 processFileController = (file) ->
-    return "1+1"
+    __asite = 
+        file:   file.name
+        module: file.module
+
+    basename = path.basename file.name
+
+    parms = []
+    args  = []
+
+    parms.push "__asite"
+    args.push  JSON.stringify(__asite)
+
+    result = """(function(#{parms.join ", "}){
+        defController = function(fn) {
+            var amod = angular.module('#{file.module}')
+            amod.controller('#{basename}', fn)
+        }
+        #{file.js}
+        })(
+            #{args.join ",\n    "}
+        )"""
+
+    return result
 
 #-------------------------------------------------------------------------------
 processFileService = (file) ->
